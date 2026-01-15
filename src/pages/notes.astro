@@ -1,16 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ItemLink from '../components/ItemLink.astro';
+import { getNoteCategories } from '../utils/content';
 
-// 1. 获取所有笔记
-const allNotes = await getCollection('notes');
+// 获取所有笔记分类
+const categories = await getNoteCategories();
 
-// 2. 提取所有唯一的分类名
-// 假设 slug 结构是 "Category/NoteName"
-const categories = [...new Set(allNotes.map(note => note.slug.split('/')[0]))].sort();
-
-// 3. 构造显示数据
+// 构造显示数据
 const items = categories.map(cat => ({
   name: cat,
   path: `/${cat}`,

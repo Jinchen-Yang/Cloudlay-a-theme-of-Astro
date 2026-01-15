@@ -1,29 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ItemLink from '../../components/ItemLink.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getNoteCategories, getSortedNotes } from '../../utils/content';
 
 export async function getStaticPaths() {
-  const allNotes = await getCollection('notes');
-  
-  // 1. 提取所有唯一的分类名
-  const categories = new Set(allNotes.map(note => note.slug.split('/')[0]));
-  
-  // 2. 生成路径
-  return Array.from(categories).map(category => ({
+  const categories = await getNoteCategories();
+
+  return categories.map(category => ({
     params: { category }
   }));
 }
 
 const { category } = Astro.params;
 
-// 3. 获取当前分类下的所有笔记
-const postsInCategory = await getCollection('notes', ({ slug }) => {
-  return slug.startsWith(`${category}/`);
-});
+// 获取当前分类下的所有笔记
+const postsInCategory = await getSortedNotes(category!);
 
-// 4. 格式化数据供模板使用
+// 格式化数据供模板使用
 const files = postsInCategory.map(note => {
   const parts = note.slug.split('/');
   const fileName = parts[parts.length - 1]; // 获取文件名
@@ -41,9 +35,9 @@ const files = postsInCategory.map(note => {
       { label: '笔记', href: '/notes' },
       { label: category!, href: `/notes/${category}` }
     ]} />
-    
+
     <h1>{category}</h1>
-    
+
     <div class="items-grid">
       {files.length === 0 ? (
         <p class="empty-state">这个分类下还没有文件</p>

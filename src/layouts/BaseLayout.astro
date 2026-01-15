@@ -8,8 +8,8 @@ interface Props {
   siteName?: string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = '我的博客 - 分享技术与生活',
   siteName = '我的博客'
 } = Astro.props;
@@ -27,28 +27,8 @@ const fullTitle = `${title} - ${siteName}`;
     <meta name="author" content="博客作者" />
     <title>{fullTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- KaTeX 数学公式支持 -->
+    <!-- KaTeX 数学公式支持 - 服务端已渲染，只需样式 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-1B+J3tTMBh7hFjKXnlhJ+7L+MtjlrG8GpPpJ2G9Xj3gPz7Dp0gK8B7vo0J5q5l5q+" crossorigin="anonymous" />
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.js" integrity="sha384-1B+J3tTMBh7hFjKXnlhJ+7L+MtjlrG8GpPpJ2G9Xj3gPz7Dp0gK8B7vo0J5q5l5q+" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // @ts-ignore
-        if (typeof renderMathInElement !== 'undefined') {
-          // @ts-ignore
-          renderMathInElement(document.body, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-            ],
-            throwOnError: false,
-            strict: false
-          });
-        }
-      });
-    </script>
   </head>
   <body>
     <header class="header">

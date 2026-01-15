@@ -1,7 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../../components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
 
 // 1. 生成静态路径
 export async function getStaticPaths() {
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   return allNotes.map((entry) => {
     // 将 slug 按 "/" 切分
     const parts = entry.slug.split('/');
-    
+
     // 如果文件在根目录（没有分类），需要做容错处理（这里假设一定有分类）
     const category = parts[0];
     const slug = parts.slice(1).join('/'); // 处理多级目录的情况
@@ -43,9 +43,9 @@ const title = entry.data.title || slug;
       { label: category!, href: `/notes/${category}` },
       { label: title, href: `/notes/${category}/${slug}` }
     ]} />
-    
+
     <h1>{title}</h1>
-    
+
     <div class="content-body">
       <Content />
     </div>

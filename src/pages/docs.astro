@@ -41,6 +41,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ├── styles/                  # 全局样式
 │   └── global.css           # CSS 变量和全局样式
 └── utils/                   # 工具函数
+    ├── content.ts           # 内容操作工具函数
     └── fs.ts                # 文件系统操作</code></pre>
 
     <h2 id="quickstart">🚀 快速开始</h2>
@@ -150,6 +151,28 @@ tags: ['标签1', '标签2']
     <h3>添加新字体</h3>
     <p>在 <code>src/styles/global.css</code> 中使用 <code>@font-face</code> 或导入 Google Fonts。</p>
 
+    <h3>使用内容工具函数</h3>
+    <p>项目提供了统一的内容操作工具函数，简化了数据获取和处理过程：</p>
+    <pre><code>import {
+  getSortedBlogPosts,
+  getSortedNotes,
+  getBlogTags,
+  getNoteCategories,
+  getStats
+} from '../utils/content';
+
+// 获取最新20篇博客文章
+const posts = await getSortedBlogPosts(20);
+
+// 获取笔记分类列表
+const categories = await getNoteCategories();
+
+// 获取分类下的笔记
+const notes = await getSortedNotes('高等数学');
+
+// 获取统计信息
+const stats = await getStats(); // { posts: 15, notes: 25, tags: 8, categories: 5 }</code></pre>
+
     <h3>扩展功能</h3>
     <ul>
       <li>使用 <code>npm run astro add</code> 添加集成（React、Vue、Tailwind 等）</li>
@@ -190,131 +213,131 @@ tags: ['标签1', '标签2']
     </table>
 
     <p class="footer-note">祝你开发愉快！🚀</p>
+
+    <style>
+      .docs {
+        line-height: 1.8;
+      }
+
+      .intro {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+      }
+
+      .toc {
+        background-color: var(--color-bg-light);
+        border-left: 4px solid var(--color-primary);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: 6px;
+      }
+
+      .toc h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin-bottom: 0.5rem;
+      }
+
+      .toc a {
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+
+      .toc a:hover {
+        text-decoration: underline;
+      }
+
+      h2 {
+        scroll-margin-top: 100px;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-border);
+      }
+
+      h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+        color: var(--color-text-primary);
+      }
+
+      pre {
+        background-color: var(--color-bg-lighter);
+        border-radius: 6px;
+        padding: 1rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-left: 4px solid var(--color-primary);
+      }
+
+      code {
+        background-color: var(--color-bg-lighter);
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+        font-size: 0.9em;
+      }
+
+      pre code {
+        background-color: transparent;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      ul, ol {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      th, td {
+        border: 1px solid var(--color-border);
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      th {
+        background-color: var(--color-bg-lighter);
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background-color: var(--color-bg-light);
+      }
+
+      a {
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-note {
+        margin-top: 2rem;
+        text-align: center;
+        color: var(--color-text-secondary);
+      }
+    </style>
   </article>
-
-  <style>
-    .docs {
-      line-height: 1.8;
-    }
-
-    .intro {
-      font-size: 1.1rem;
-      color: var(--color-text-secondary);
-      margin-bottom: 2rem;
-    }
-
-    .toc {
-      background-color: var(--color-bg-light);
-      border-left: 4px solid var(--color-primary);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border-radius: 6px;
-    }
-
-    .toc h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-
-    .toc ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .toc li {
-      margin-bottom: 0.5rem;
-    }
-
-    .toc a {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
-
-    .toc a:hover {
-      text-decoration: underline;
-    }
-
-    h2 {
-      scroll-margin-top: 100px;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--color-border);
-    }
-
-    h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 0.8rem;
-      color: var(--color-text-primary);
-    }
-
-    pre {
-      background-color: var(--color-bg-lighter);
-      border-radius: 6px;
-      padding: 1rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-      border-left: 4px solid var(--color-primary);
-    }
-
-    code {
-      background-color: var(--color-bg-lighter);
-      padding: 0.2em 0.4em;
-      border-radius: 3px;
-      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-      font-size: 0.9em;
-    }
-
-    pre code {
-      background-color: transparent;
-      padding: 0;
-      border-radius: 0;
-    }
-
-    ul, ol {
-      margin-left: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    li {
-      margin-bottom: 0.5rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-
-    th, td {
-      border: 1px solid var(--color-border);
-      padding: 0.75rem;
-      text-align: left;
-    }
-
-    th {
-      background-color: var(--color-bg-lighter);
-      font-weight: 600;
-    }
-
-    tr:hover {
-      background-color: var(--color-bg-light);
-    }
-
-    a {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-note {
-      margin-top: 2rem;
-      text-align: center;
-      color: var(--color-text-secondary);
-    }
-  </style>
 </BaseLayout>
