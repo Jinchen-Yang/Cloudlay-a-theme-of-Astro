@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="博客">
+  <article>
+    <h1>博客文章</h1>
+    <p class="subtitle">记录开发心得和学习笔记</p>
+
+    <div class="posts-grid">
+      {posts.length === 0 ? (
+        <p class="empty-state">暂时还没有文章</p>
+      ) : (
+        posts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="post-card-link">
+            <div class="post-card">
+              <div class="post-header">
+                <h2>{post.data.title}</h2>
+                <div class="post-meta">
+                  <span class="date">{post.data.pubDate.toLocaleDateString('zh-CN')}</span>
+                  {post.data.author && <span class="author">{post.data.author}</span>}
+                </div>
+              </div>
+
+              <p class="description">{post.data.description}</p>
+
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="tags">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              <div class="read-more">阅读全文 →</div>
+            </div>
+          </a>
+        ))
+      )}
+    </div>
+  </article>
+
+  <style>
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .empty-state {
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .post-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .post-card {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      background-color: var(--color-bg-light);
+      transition: all 0.3s ease;
+    }
+
+    .post-card-link:hover .post-card {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      background-color: #fff;
+      border-color: var(--color-primary);
+    }
+
+    .post-header {
+      margin-bottom: 1rem;
+    }
+
+    .post-card h2 {
+      margin: 0 0 0.8rem 0;
+      font-size: 1.3rem;
+      color: var(--color-text-primary);
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    .description {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background-color: #e8f0fe;
+      color: var(--color-primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    .read-more {
+      color: var(--color-primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .post-card-link:hover .read-more {
+      color: var(--color-primary-hover);
+    }
+  </style>
+</BaseLayout>

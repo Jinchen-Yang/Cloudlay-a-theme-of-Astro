@@ -1,0 +1,167 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map((entry: CollectionEntry<'blog'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+---
+
+<BaseLayout title={entry.data.title}>
+  <article class="post">
+    <header class="post-header">
+      <a href="/blog" class="back-link">← 返回博客</a>
+      <h1>{entry.data.title}</h1>
+      <p class="post-meta">
+        {entry.data.pubDate.toLocaleDateString('zh-CN')}
+        {entry.data.author && ` • ${entry.data.author}`}
+      </p>
+      {entry.data.tags && entry.data.tags.length > 0 && (
+        <div class="tags">
+          {entry.data.tags.map((tag: string) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+    
+    <div class="post-content">
+      <Content />
+    </div>
+  </article>
+
+  <style>
+    .back-link {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .post h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .post-meta {
+      color: #999;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-block;
+      background-color: #e8f0fe;
+      color: #0066cc;
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+
+    .post-content {
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    :global(.post-content h1),
+    :global(.post-content h2),
+    :global(.post-content h3) {
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    :global(.post-content h1) {
+      font-size: 2rem;
+    }
+
+    :global(.post-content h2) {
+      font-size: 1.5rem;
+    }
+
+    :global(.post-content h3) {
+      font-size: 1.2rem;
+    }
+
+    :global(.post-content p) {
+      margin-bottom: 1rem;
+    }
+
+    :global(.post-content ul),
+    :global(.post-content ol) {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    :global(.post-content li) {
+      margin-bottom: 0.5rem;
+    }
+
+    :global(.post-content code) {
+      background-color: #f5f5f5;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9em;
+    }
+
+    :global(.post-content pre) {
+      background-color: #f5f5f5;
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border-left: 4px solid #0066cc;
+    }
+
+    :global(.post-content pre code) {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    :global(.post-content blockquote) {
+      border-left: 4px solid #0066cc;
+      padding-left: 1rem;
+      margin-left: 0;
+      margin-right: 0;
+      color: #666;
+      font-style: italic;
+    }
+
+    :global(.post-content img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 1rem 0;
+    }
+  </style>
+</BaseLayout>

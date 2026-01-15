@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ItemLink from '../components/ItemLink.astro';
+
+// 1. 获取所有笔记
+const allNotes = await getCollection('notes');
+
+// 2. 提取所有唯一的分类名
+// 假设 slug 结构是 "Category/NoteName"
+const categories = [...new Set(allNotes.map(note => note.slug.split('/')[0]))].sort();
+
+// 3. 构造显示数据
+const items = categories.map(cat => ({
+  name: cat,
+  path: `/${cat}`,
+  type: 'folder'
+}));
+---
+
+<BaseLayout title="学习笔记">
+  <article>
+    <h1>学习笔记</h1>
+    <p class="subtitle">整理的学习笔记和知识点汇总</p>
+
+    <div class="notes-grid">
+      {items.length === 0 ? (
+        <p class="empty-state">暂时还没有笔记</p>
+      ) : (
+        items.map(item => (
+          <ItemLink
+            href={`/notes${item.path}`}
+            icon={item.type === 'folder' ? '📁' : '📄'}
+            title={item.name}
+          />
+        ))
+      )}
+    </div>
+  </article>
+
+  <style>
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .notes-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .empty-state {
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+</BaseLayout>

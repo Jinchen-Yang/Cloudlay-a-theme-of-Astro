@@ -1,0 +1,59 @@
+---
+interface Props {
+  href: string;
+  icon?: string;
+  title: string;
+}
+
+const { href, icon = '📄', title } = Astro.props;
+---
+
+<a href={href} class="item-link">
+  <div class="item">
+    <div class="icon">{icon}</div>
+    <div class="info">
+      <h3>{title}</h3>
+    </div>
+    <div class="arrow">→</div>
+  </div>
+</a>
+
+<style>
+  .item-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: var(--color-bg-light);
+    transition: all 0.2s;
+  }
+
+  .item-link:hover .item {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    border-color: var(--color-border-dark);
+  }
+
+  .icon {
+    font-size: 1.3rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .info h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+  }
+
+  .arrow {
+    margin-left: auto;
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ItemLink from '../../components/ItemLink.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const allNotes = await getCollection('notes');
+  
+  // 1. 提取所有唯一的分类名
+  const categories = new Set(allNotes.map(note => note.slug.split('/')[0]));
+  
+  // 2. 生成路径
+  return Array.from(categories).map(category => ({
+    params: { category }
+  }));
+}
+
+const { category } = Astro.params;
+
+// 3. 获取当前分类下的所有笔记
+const postsInCategory = await getCollection('notes', ({ slug }) => {
+  return slug.startsWith(`${category}/`);
+});
+
+// 4. 格式化数据供模板使用
+const files = postsInCategory.map(note => {
+  const parts = note.slug.split('/');
+  const fileName = parts[parts.length - 1]; // 获取文件名
+  return {
+    name: note.data.title || fileName, // 优先显示标题
+    path: `/${fileName}`, // 链接只需后半部分，因为当前路径已经是 /notes/[category]
+    type: 'file'
+  };
+});
+---
+
+<BaseLayout title={category}>
+  <article>
+    <Breadcrumb items={[
+      { label: '笔记', href: '/notes' },
+      { label: category!, href: `/notes/${category}` }
+    ]} />
+    
+    <h1>{category}</h1>
+    
+    <div class="items-grid">
+      {files.length === 0 ? (
+        <p class="empty-state">这个分类下还没有文件</p>
+      ) : (
+        files.map(file => (
+          <ItemLink
+            href={`/notes/${category}${file.path}`}
+            icon="📄"
+            title={file.name}
+          />
+        ))
+      )}
+    </div>
+  </article>
+
+  <style>
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .items-grid {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .empty-state {
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+</BaseLayout>
