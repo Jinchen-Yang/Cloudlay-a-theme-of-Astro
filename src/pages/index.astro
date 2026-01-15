@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
-import PostCard from '../components/PostCard.astro';
+import VvhanPostCard from '../components/VvhanPostCard.astro';
 import { getSortedBlogPosts, getStats } from '../utils/content';
 
 // 获取博客文章并按日期排序
@@ -68,7 +68,7 @@ const stats = await getStats();
             </div>
           ) : (
             posts.map((post) => (
-              <PostCard
+              <VvhanPostCard
                 title={post.data.title}
                 description={post.data.description}
                 slug={post.slug}
@@ -219,11 +219,11 @@ const stats = await getStats();
       transform: translateX(4px);
     }
 
-    /* 文章容器 */
+    /* 文章容器 - 长方形卡片网格布局 */
     .posts-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
     }
 
     /* 空状态 */
@@ -267,6 +267,11 @@ const stats = await getStats();
       .section-title {
         font-size: 1.5rem;
       }
+
+      .posts-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
     }
 
     /* iPad 竖屏 (768px - 769px) */
@@ -303,6 +308,11 @@ const stats = await getStats();
         align-items: flex-start;
         gap: 0.75rem;
       }
+
+      .posts-container {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1rem;
+      }
     }
 
     /* 手机端 (小于 480px) */
@@ -327,6 +337,11 @@ const stats = await getStats();
 
       .section-title {
         font-size: 1.25rem;
+      }
+
+      .posts-container {
+        grid-template-columns: 1fr;
+        gap: 0.875rem;
       }
     }
 
