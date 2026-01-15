@@ -1,0 +1,558 @@
+---
+interface Props {
+  name: string;
+  title: string;
+  avatar: string;
+  bio: string;
+  tagline: string;
+  email: string;
+  github?: string;
+  twitter?: string;
+  website?: string;
+  stats?: {
+    posts?: number;
+    categories?: number;
+    tags?: number;
+  };
+}
+
+const { 
+  name, 
+  title, 
+  avatar, 
+  bio, 
+  tagline, 
+  email, 
+  github, 
+  twitter, 
+  website,
+  stats = { posts: 0, categories: 0, tags: 0 }
+} = Astro.props;
+---
+
+<div class="author-card">
+  <!-- 头像与基本信息 -->
+  <div class="author-header">
+    <div class="avatar-wrapper">
+      <img 
+        src={avatar} 
+        alt={name}
+        class="avatar"
+        onerror="this.src='https://via.placeholder.com/150/667eea/ffffff?text=Avatar'"
+      />
+      <div class="avatar-glow"></div>
+    </div>
+    
+    <div class="author-info">
+      <h1 class="author-name">{name}</h1>
+      <p class="author-title">{title}</p>
+      <p class="author-tagline">💭 {tagline}</p>
+    </div>
+  </div>
+
+  <!-- 个人简介 -->
+  <div class="author-bio-section">
+    <p class="author-bio">{bio}</p>
+  </div>
+
+  <!-- 个人信息 -->
+  <div class="author-details">
+    <a href={`mailto:${email}`} class="detail-link" title="邮件">
+      <span class="detail-icon">✉️</span>
+      <span>联系我</span>
+    </a>
+    {website && (
+      <a href={website} class="detail-link" target="_blank" rel="noopener noreferrer" title="个人网站">
+        <span class="detail-icon">🌐</span>
+        <span>网站</span>
+      </a>
+    )}
+  </div>
+
+  <!-- 社交链接 -->
+  <div class="social-links">
+    {github && (
+      <a href={`https://github.com/${github}`} 
+         class="social-link github" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         title="GitHub"
+         aria-label="GitHub">
+        <span class="social-icon">🐙</span>
+      </a>
+    )}
+    {twitter && (
+      <a href={`https://twitter.com/${twitter}`} 
+         class="social-link twitter" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         title="Twitter"
+         aria-label="Twitter">
+        <span class="social-icon">𝕏</span>
+      </a>
+    )}
+    <a href="/blog" 
+       class="social-link blog" 
+       title="所有文章"
+       aria-label="所有文章">
+      <span class="social-icon">📝</span>
+    </a>
+  </div>
+
+  <!-- 统计数据 -->
+  {stats && (stats.posts || stats.categories || stats.tags) && (
+    <div class="stats-grid">
+      {stats.posts !== undefined && (
+        <div class="stat-card">
+          <span class="stat-number">{stats.posts}</span>
+          <span class="stat-label">篇文章</span>
+        </div>
+      )}
+      {stats.categories !== undefined && (
+        <div class="stat-card">
+          <span class="stat-number">{stats.categories}</span>
+          <span class="stat-label">个分类</span>
+        </div>
+      )}
+      {stats.tags !== undefined && (
+        <div class="stat-card">
+          <span class="stat-number">{stats.tags}</span>
+          <span class="stat-label">个标签</span>
+        </div>
+      )}
+    </div>
+  )}
+
+  <!-- 快速导航 -->
+  <div class="quick-nav">
+    <a href="/blog" class="nav-button primary">📚 浏览文章</a>
+    <a href="/notes" class="nav-button secondary">📖 学习笔记</a>
+  </div>
+</div>
+
+<style>
+  .author-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .author-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+  }
+
+  /* 头像区域 */
+  .author-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .avatar-wrapper:hover .avatar {
+    transform: scale(1.05);
+  }
+
+  .avatar-glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .author-card:hover .avatar-glow {
+    opacity: 0.3;
+  }
+
+  .author-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: #1a202c;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .author-title {
+    font-size: 0.95rem;
+    color: #667eea;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+  }
+
+  .author-tagline {
+    font-size: 0.9rem;
+    color: #718096;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* 生物区域 */
+  .author-bio-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .author-bio {
+    font-size: 0.95rem;
+    color: #718096;
+    line-height: 1.6;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* 详细信息链接 */
+  .author-details {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: #f0f4ff;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .detail-link:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .detail-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* 社交链接 */
+  .social-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    color: #1a202c;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid #e2e8f0;
+  }
+
+  .social-link:hover {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .social-link.github:hover {
+    background: linear-gradient(135deg, #333, #555);
+    color: white;
+    border-color: #333;
+  }
+
+  .social-link.twitter:hover {
+    background: linear-gradient(135deg, #1da1f2, #1a8cd8);
+    color: white;
+    border-color: #1da1f2;
+  }
+
+  .social-link.blog:hover {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-color: #667eea;
+  }
+
+  .social-icon {
+    font-size: 1.3rem;
+  }
+
+  /* 统计网格 */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f0f4ff;
+    border-radius: 12px;
+    transition: all 0.15s ease;
+  }
+
+  .stat-card:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card:hover .stat-number {
+    color: white;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: #718096;
+    text-align: center;
+  }
+
+  .stat-card:hover .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* 快速导航 */
+  .quick-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-button {
+    display: block;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+
+  .nav-button.primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-button.secondary {
+    background-color: #f8f9fa;
+    color: #667eea;
+    border: 2px solid #667eea;
+  }
+
+  .nav-button.secondary:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* 深色模式 */
+  @media (prefers-color-scheme: dark) {
+    .author-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+      border-color: #333;
+    }
+
+    .author-name {
+      color: #e2e8f0;
+    }
+
+    .author-bio,
+    .author-title,
+    .author-tagline {
+      color: #a0aec0;
+    }
+
+    .author-bio-section,
+    .stats-grid {
+      border-color: #333;
+    }
+
+    .detail-link {
+      background-color: rgba(102, 126, 234, 0.1);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .detail-link:hover {
+      background-color: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .social-link {
+      background-color: #242424;
+      border-color: #333;
+      color: #e2e8f0;
+    }
+
+    .stat-card {
+      background-color: rgba(102, 126, 234, 0.1);
+    }
+
+    .stat-card:hover {
+      background-color: #667eea;
+    }
+
+    .stat-number {
+      color: #667eea;
+    }
+
+    .stat-card:hover .stat-number {
+      color: white;
+    }
+
+    .stat-label {
+      color: #a0aec0;
+    }
+
+    .nav-button.secondary {
+      background-color: #242424;
+      border-color: #667eea;
+    }
+
+    .nav-button.secondary:hover {
+      background-color: #667eea;
+      color: white;
+    }
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .author-card {
+      padding: 1.5rem;
+    }
+
+    .avatar-wrapper {
+      width: 90px;
+      height: 90px;
+    }
+
+    .author-name {
+      font-size: 1.4rem;
+    }
+
+    .author-details {
+      flex-direction: column;
+    }
+
+    .detail-link {
+      justify-content: center;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .author-card {
+      padding: 1.25rem;
+    }
+
+    .avatar-wrapper {
+      width: 70px;
+      height: 70px;
+    }
+
+    .author-name {
+      font-size: 1.25rem;
+    }
+
+    .author-title {
+      font-size: 0.85rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .stat-card {
+      padding: 0.75rem;
+    }
+
+    .stat-number {
+      font-size: 1.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+    }
+
+    .detail-link {
+      font-size: 0.8rem;
+      padding: 0.6rem;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+    }
+
+    .social-icon {
+      font-size: 1.1rem;
+    }
+
+    .nav-button {
+      padding: 0.875rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
