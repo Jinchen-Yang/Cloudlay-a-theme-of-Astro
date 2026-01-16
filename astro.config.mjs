@@ -1,52 +1,192 @@
-import { defineConfig } from 'astro/config';
-import remarkMath from 'remark-math';
-import remarkGfm from 'remark-gfm';
-import remarkDirective from 'remark-directive';
-import remarkWikiLink from 'remark-wiki-link';
-import rehypeKatex from 'rehype-katex';
-import rehypeAttr from 'rehype-attr';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import remarkCallouts from './src/utils/remark-callouts.js';
+import sitemap from "@astrojs/sitemap";
+import svelte, { vitePreprocess } from "@astrojs/svelte";
+import tailwind from "@astrojs/tailwind";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import swup from "@swup/astro";
+import { defineConfig } from "astro/config";
+import expressiveCode from "astro-expressive-code";
+import icon from "astro-icon";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeComponents from "rehype-components";
+import rehypeKatex from "rehype-katex";
+import rehypeSlug from "rehype-slug";
+import remarkDirective from "remark-directive";
+import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
+import remarkMath from "remark-math";
+import remarkSectionize from "remark-sectionize";
+import { siteConfig } from "./src/config.ts";
+import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
+import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
+import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
+import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
+import { rehypeWrapTable } from "./src/plugins/rehype-wrap-table.mjs";
+import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
+import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
+import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
+import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+import { rehypeImageWidth } from "./src/plugins/rehype-image-width.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  markdown: {
-    remarkPlugins: [
-      remarkMath, 
-      remarkGfm, 
-      remarkDirective,
-      remarkCallouts,
-      [remarkWikiLink, {
-        // 配置 wiki 链接插件
-        pageResolver: (name) => {
-          // 将 Obsidian 内部链接转换为实际路径
-          // 这里我们需要根据文件名查找实际的笔记路径
-          // 由于我们无法在构建时访问文件系统，我们返回一个通用路径
-          // 实际路径将由前端 JavaScript 处理或通过重写规则处理
-          return [`/notes/${name}`];
-        },
-        hrefTemplate: (permalink) => permalink,
-        aliasDivider: '|', // 支持别名语法 [[显示文本|实际文件]]
-        wikiLinkClassName: 'wiki-link', // 添加自定义 CSS 类
-        newClassName: 'new-wiki-link', // 新链接的 CSS 类
-      }]
-    ],
-    rehypePlugins: [
-      rehypeKatex,
-      rehypeAttr,
-      rehypeSlug,
-      [rehypeAutolinkHeadings, {
-        behavior: 'append',
-        properties: {
-          className: ['anchor-link'],
-          ariaLabel: '链接到标题'
-        }
-      }]
-    ],
-    // 启用 GitHub Flavored Markdown 特性
-    gfm: true,
-    // 支持更多 Markdown 特性
-    smartypants: true,
-  },
+	site: siteConfig.siteURL,
+	base: "/",
+	trailingSlash: "always",
+
+	output: "static",
+
+	integrations: [
+		tailwind({
+			nesting: true,
+		}),
+		swup({
+			theme: false,
+			animationClass: "transition-swup-",
+			containers: ["main"],
+			smoothScrolling: false, // 禁用平滑滚动以提升性能，避免与锚点导航冲突
+			cache: true,
+			preload: true, // swup 默认鼠标悬停预加载
+			accessibility: true,
+			updateHead: true,
+			updateBodyClass: false,
+			globalInstance: true,
+			// 滚动相关配置优化
+			resolveUrl: (url) => url,
+			animateHistoryBrowsing: false,
+			skipPopStateHandling: (event) => {
+				// 跳过锚点链接的处理，让浏览器原生处理
+				return (
+					event.state &&
+					event.state.url &&
+					event.state.url.includes("#")
+				);
+			},
+		}),
+		icon(),
+		expressiveCode({
+			themes: ["github-light", "github-dark"],
+			plugins: [
+				pluginCollapsibleSections(),
+				pluginLineNumbers(),
+				pluginLanguageBadge(),
+				pluginCustomCopyButton(),
+			],
+			defaultProps: {
+				wrap: true,
+				overridesByLang: {
+					shellsession: { showLineNumbers: false },
+					bash: { frame: "code" },
+					shell: { frame: "code" },
+					sh: { frame: "code" },
+					zsh: { frame: "code" },
+				},
+			},
+			styleOverrides: {
+				codeBackground: "var(--codeblock-bg)",
+				borderRadius: "0.75rem",
+				borderColor: "none",
+				codeFontSize: "0.875rem",
+				codeFontFamily:
+					"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+				codeLineHeight: "1.5rem",
+				frames: {
+					editorBackground: "var(--codeblock-bg)",
+					terminalBackground: "var(--codeblock-bg)",
+					terminalTitlebarBackground: "var(--codeblock-bg)",
+					editorTabBarBackground: "var(--codeblock-bg)",
+					editorActiveTabBackground: "none",
+					editorActiveTabIndicatorBottomColor: "var(--primary)",
+					editorActiveTabIndicatorTopColor: "none",
+					editorTabBarBorderBottomColor: "var(--codeblock-bg)",
+					terminalTitlebarBorderBottomColor: "none",
+				},
+				textMarkers: {
+					delHue: 0,
+					insHue: 180,
+					markHue: 250,
+				},
+			},
+			frames: {
+				showCopyToClipboardButton: false,
+			},
+		}),
+		svelte({
+			preprocess: vitePreprocess(),
+		}),
+		sitemap(),
+	],
+	markdown: {
+		remarkPlugins: [
+			remarkMath,
+			remarkReadingTime,
+			remarkExcerpt,
+			remarkGithubAdmonitionsToDirectives,
+			remarkDirective,
+			remarkSectionize,
+			parseDirectiveNode,
+			remarkMermaid,
+		],
+		rehypePlugins: [
+			rehypeKatex,
+			rehypeSlug,
+			rehypeWrapTable,
+			rehypeMermaid,
+			rehypeImageWidth,
+			[
+				rehypeComponents,
+				{
+					components: {
+						github: GithubCardComponent,
+						note: (x, y) => AdmonitionComponent(x, y, "note"),
+						tip: (x, y) => AdmonitionComponent(x, y, "tip"),
+						important: (x, y) =>
+							AdmonitionComponent(x, y, "important"),
+						caution: (x, y) => AdmonitionComponent(x, y, "caution"),
+						warning: (x, y) => AdmonitionComponent(x, y, "warning"),
+					},
+				},
+			],
+			[
+				rehypeAutolinkHeadings,
+				{
+					behavior: "append",
+					properties: {
+						className: ["anchor"],
+					},
+					content: {
+						type: "element",
+						tagName: "span",
+						properties: {
+							className: ["anchor-icon"],
+							"data-pagefind-ignore": true,
+						},
+						children: [{ type: "text", value: "#" }],
+					},
+				},
+			],
+		],
+	},
+	vite: {
+		build: {
+			// 静态资源处理优化，防止小图片转 base64 导致 HTML 体积过大（可选，根据需要调整）
+			assetsInlineLimit: 4096,
+
+			rollupOptions: {
+				onwarn(warning, warn) {
+					if (
+						warning.message.includes(
+							"is dynamically imported by",
+						) &&
+						warning.message.includes(
+							"but also statically imported by",
+						)
+					) {
+						return;
+					}
+					warn(warning);
+				},
+			},
+		},
+	},
 });
