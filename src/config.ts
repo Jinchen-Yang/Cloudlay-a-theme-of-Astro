@@ -105,6 +105,7 @@ export const siteConfig: SiteConfig = {
 	banner: {
 		// 支持单张图片或图片数组，当数组长度 > 1 时自动启用轮播
 		src: {
+			
 			desktop: [
 				bannerConfig.desktopBanner,
 			], // 桌面横幅图片
@@ -128,8 +129,8 @@ export const siteConfig: SiteConfig = {
 
 		// PicFlow API支持(智能图片API)
 		imageApi: {
-			enable: true, // 启用图片API
-			url: "https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN", // 必应每日图片API
+			enable: false, // 启用图片API
+			url: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 		},
 
 		homeText: {
@@ -190,10 +191,10 @@ export const siteConfig: SiteConfig = {
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 	src: {
 		desktop: [
-			"/assets/site/banner/desktop/1.webp",
+			"https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 		], // 桌面横幅图片
 		mobile: [
-			"/assets/site/banner/mobile/1.webp",
+			"https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 		], // 移动横幅图片
 	}, // 使用本地横幅图片
 	position: "center", // 壁纸位置，等同于 object-position

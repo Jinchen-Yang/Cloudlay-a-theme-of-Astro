@@ -160,10 +160,10 @@ export const bannerConfig = {
   ],
 
   // 桌面端横幅图片
-  desktopBanner: "/assets/site/desktop-banner/1.webp",
+  desktopBanner: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 
   // 移动端横幅图片
-  mobileBanner: "/assets/site/mobile-banner/1.webp",
+  mobileBanner: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 
   // 是否启用轮播
   carousel: false,
