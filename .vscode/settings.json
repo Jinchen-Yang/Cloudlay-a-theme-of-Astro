@@ -1,0 +1,34 @@
+{
+    "editor.suggestSelection": "first",
+    "editor.snippetsSuggestions": "top",
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "on",
+        "strings": "on"
+    },
+    "[markdown]": {
+        "editor.quickSuggestions": {
+            "other": "on",
+            "comments": "on",
+            "strings": "on"
+        }
+    },
+    "frontMatter.framework.id": "astro",
+    "frontMatter.preview.host": "http://localhost:4321",
+    "frontMatter.content.pageFolders": [
+        {
+            "title": "posts",
+            "path": "[[workspace]]/src/content/posts",
+            "contentTypes": [
+                "posts"
+            ]
+        },
+        {
+            "title": "spec",
+            "path": "[[workspace]]/src/content/spec",
+            "contentTypes": [
+                "spec"
+            ]
+        }
+    ]
+}

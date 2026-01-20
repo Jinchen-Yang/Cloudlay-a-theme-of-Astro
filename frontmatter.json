@@ -1,0 +1,160 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.framework.id": "astro",
+  "frontMatter.preview.host": "http://localhost:4321",
+  "frontMatter.content.publicFolder": "public",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "blog",
+      "path": "[[workspace]]/src/content/blog"
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "posts",
+      "previewPath": "'posts'",
+      "pageBundle": false,
+      "clearEmpty": true,
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "published",
+          "type": "datetime",
+          "default": "{{now}}",
+          "isPublishDate": true,
+          "required": true
+        },
+        {
+          "name": "updated",
+          "type": "datetime",
+          "default": "{{now}}",
+          "isModifiedDate": true
+        },
+        {
+          "name": "draft",
+          "type": "draft"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "image",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "name": "tags",
+          "type": "tags",
+          "default": []
+        },
+        {
+          "name": "lang",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "pinned",
+          "type": "boolean"
+        },
+        {
+          "name": "priority",
+          "type": "number"
+        },
+        {
+          "name": "author",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "sourceLink",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "licenseName",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "licenseUrl",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "encrypted",
+          "type": "boolean"
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "alias",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "permalink",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "prevTitle",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "prevSlug",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "nextTitle",
+          "type": "string",
+          "single": true
+        },
+        {
+          "name": "nextSlug",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "category",
+          "name": "category",
+          "type": "categories"
+        }
+      ]
+    },
+    {
+      "name": "spec",
+      "previewPath": "'spec'",
+      "pageBundle": false,
+      "clearEmpty": true,
+      "fields": [
+        {
+          "title": "title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "date",
+          "name": "date",
+          "type": "datetime"
+        },
+        {
+          "title": "description",
+          "name": "description",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}
