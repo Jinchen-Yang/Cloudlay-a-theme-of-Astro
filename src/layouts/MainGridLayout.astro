@@ -1,10 +1,10 @@
 ---
-import BackToTop from "@components/control/BackToTop.astro";
-import FloatingTOC from "@components/control/FloatingTOC.astro";
-import Footer from "@components/Footer.astro";
-import RightSideBar from "@components/layout/RightSideBar.astro";
-import Navbar from "@components/Navbar.astro";
-import SideBar from "@components/widget/SideBar.astro";
+import BackToTop from "../components/control/BackToTop.astro";
+import FloatingTOC from "../components/control/FloatingTOC.astro";
+import Footer from "../components/Footer.astro";
+import RightSideBar from "../components/layout/RightSideBar.astro";
+import Navbar from "../components/Navbar.astro";
+import SideBar from "../components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import FullscreenWallpaper from "../components/misc/FullscreenWallpaper.astro";
@@ -70,8 +70,14 @@ const getBannerImages = async () => {
 			// 必应API返回格式: {"url":"https://www.bing.com/th?id=OHR.XXX","copyright":"..."}
 			if (data?.url) {
 				// 确保URL是完整的
-				const imageUrl = data.url.startsWith("http") ? data.url : `https://www.bing.com${data.url}`;
-				bannerSrc = [imageUrl];
+				let desktopUrl = data.url.startsWith("http") ? data.url : `https://www.bing.com${data.url}`;
+				// 为手机端生成对应的图片URL（1080x1920）
+				let mobileUrl = desktopUrl.replace("1920x1080", "1080x1920");
+
+				bannerSrc = {
+					desktop: [desktopUrl],
+					mobile: [mobileUrl]
+				};
 			}
 		} catch (error) {
 			console.warn("Failed to fetch images from API:", error);
