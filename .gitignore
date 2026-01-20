@@ -1,34 +1,42 @@
-# build output
+# === 1. 构建产物 (绝不能上传) ===
 dist/
-# generated types
 .astro/
 
-# dependencies
+# === 2. 依赖包 (体积巨大，必须忽略) ===
 node_modules/
 
-# logs
+# === 3. 环境变量 (包含敏感信息，严禁上传) ===
+.env
+.env.*
+!.env.example
+
+# === 4. 日志文件 ===
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
+# === 5. 系统文件 (Mac/Windows 产生的垃圾) ===
 .DS_Store
-.AppleDouble
-.LSOverride
+Thumbs.db
+
+# === 6. 编辑器配置 (个人偏好，通常忽略) ===
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+.idea/
+
+# === 7. 临时文件 ===
 *.swp
 *.swo
 
-# IDE
-.vscode/
-.idea/
-*.iml
-.DS_Store
+# === 注意：不要忽略这些 ===
+# Docker 配置要上传
+# !Dockerfile
+# !docker-compose.yml
+# !nginx.conf
 
-# jetbrains setting folder
-.idea/
+# 锁文件要上传 (你用的是 pnpm)
+!pnpm-lock.yaml
+!package.json

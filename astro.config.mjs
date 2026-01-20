@@ -40,6 +40,32 @@ export default defineConfig({
 		tailwind({
 			nesting: true,
 		}),
+		icon({
+			// 限制 astro-icon 只加载我们需要的图标库，避免加载不必要的图标
+			include: {
+				// 只加载我们使用到的图标库
+				'fa6-solid': ['eye', 'envelope', 'chevron-right', 'arrow-up-right-from-square', 'xmark'],
+				'fa6-brands': ['github', 'git-alt', 'bilibili', 'creative-commons'],
+				'fa6-regular': ['address-card'],
+				'material-symbols': [
+					'search', 'timeline', 'keyboard-arrow-up-rounded', 'home', 'person', 'archive',
+					'group', 'movie', 'book', 'photo-library', 'work', 'psychology',
+					'more-horiz', 'trending-up', 'trending-down', 'article-outline',
+					'folder-outline', 'label-outline', 'text-ad-outline-rounded', 'calendar-clock-outline',
+					'ecg-heart-outline', 'restart-alt-rounded', 'keyboard-arrow-down-rounded',
+					'chevron-right-rounded', 'school', 'code', 'emoji-events', 'event',
+					'home-pin-outline', 'palette-outline', 'unfold-more', 'chevron-right-rounded',
+					'format-list-bulleted-rounded', 'chevron-left-rounded', 'calendar-today-outline-rounded',
+					'edit-calendar-outline-rounded', 'book-2-outline-rounded', 'article-outline-rounded',
+					'tag-rounded', 'visibility-outline-rounded', 'copyright-outline-rounded', 'verified',
+					'database', 'error-outline', 'sentiment-sad', 'search-off', 'notes-rounded',
+					'schedule-outline-rounded', 'share', 'history-rounded', 'rss-feed', 'link',
+					'article', 'help-outline', 'open-in-new', 'settings-suggest-outline',
+					'arrow-forward-rounded', 'mail'
+				],
+				'logos': ['astro-icon']
+			}
+		}),
 		swup({
 			theme: false,
 			animationClass: "transition-swup-",
@@ -63,7 +89,6 @@ export default defineConfig({
 				);
 			},
 		}),
-		icon(),
 		expressiveCode({
 			themes: ["github-light", "github-dark"],
 			plugins: [
@@ -172,21 +197,89 @@ export default defineConfig({
 			// 静态资源处理优化，防止小图片转 base64 导致 HTML 体积过大（可选，根据需要调整）
 			assetsInlineLimit: 4096,
 
+			// 显式启用最小化
+			minify: 'terser',
+			terserOptions: {
+				compress: {
+					drop_console: true, // 生产环境移除 console.log
+					passes: 2, // 两次压缩传递以获得最大优化
+					pure_funcs: ['console.log', 'console.info'],
+					unsafe: true,
+					unsafe_methods: true,
+				},
+				mangle: {
+					toplevel: true,
+					properties: {
+						regex: /^_/,
+					},
+				},
+			},
+
+			// 代码分割配置
 			rollupOptions: {
+				output: {
+					// 手动块配置 - 分离大型库以实现更好的缓存
+					manualChunks: {
+						// Icon 库分割
+						'vendor-icons': ['@iconify/svelte', 'astro-icon'],
+
+						// UI 库分割
+						'vendor-ui': ['photoswipe', '@fancyapps/ui', 'overlayscrollbars'],
+
+						// Markdown 和数学库分割
+						'vendor-markdown': ['marked', 'markdown-it', 'katex'],
+
+						// 其他工具库
+						'vendor-utils': ['dayjs', 'crypto-js', 'qrcode', 'sanitize-html'],
+					},
+					// 优化输出文件夹结构
+					entryFileNames: 'js/[name].[hash].js',
+					chunkFileNames: 'js/chunk-[name].[hash].js',
+					assetFileNames: (assetInfo) => {
+						const info = assetInfo.name.split('.');
+						const ext = info[info.length - 1];
+						if (/png|jpe?g|gif|svg/.test(ext)) {
+							return `images/[name]-[hash][extname]`;
+						} else if (/woff|woff2|eot|ttf|otf/.test(ext)) {
+							return `fonts/[name]-[hash][extname]`;
+						} else if (ext === 'css') {
+							return `css/[name]-[hash][extname]`;
+						}
+						return `[name]-[hash][extname]`;
+					},
+				},
+
+				// 警告过滤
 				onwarn(warning, warn) {
+					// 忽略 Rollup 的动态导入警告
 					if (
-						warning.message.includes(
-							"is dynamically imported by",
-						) &&
-						warning.message.includes(
-							"but also statically imported by",
-						)
+						warning.message.includes('is dynamically imported by') &&
+						warning.message.includes('but also statically imported by')
 					) {
 						return;
 					}
 					warn(warning);
 				},
 			},
+
+			// 其他构建优化
+			reportCompressedSize: false, // 禁用压缩大小报告加快构建
+			cssCodeSplit: true, // CSS 代码分割（默认）
+			sourcemap: false, // 生产环境禁用 sourcemap，可减少构建输出大小
+		},
+
+		// Vite 优化选项
+		optimizeDeps: {
+			include: [
+				'@iconify/svelte',
+				'photoswipe',
+				'dayjs',
+			],
+		},
+
+		// 定义环境变量
+		define: {
+			__DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
 		},
 	},
 });
