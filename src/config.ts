@@ -194,7 +194,7 @@ export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 			"https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
 		], // 桌面横幅图片
 		mobile: [
-			"https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
+			"https://bing.biturl.top/?resolution=1080x1920&format=image&index=0&mkt=zh-CN",
 		], // 移动横幅图片
 	}, // 使用本地横幅图片
 	position: "center", // 壁纸位置，等同于 object-position
