@@ -160,10 +160,10 @@ export const bannerConfig = {
   ],
 
   // 桌面端横幅图片
-  desktopBanner: "/assets/site/banner/desktop/1.webp",
+  desktopBanner: "/assets/site/desktop-banner/1.webp",
 
   // 移动端横幅图片
-  mobileBanner: "/assets/site/banner/mobile/1.webp",
+  mobileBanner: "/assets/site/mobile-banner/1.webp",
 
   // 是否启用轮播
   carousel: false,
