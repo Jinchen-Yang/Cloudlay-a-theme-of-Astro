@@ -37,7 +37,7 @@ export const personalInfo = {
   bio: "北邮咸鱼一枚",
 
   // 头像路径（相对于 public 目录）
-  avatar: "/avatar.jpg",
+  avatar: "/assets/site/avatar/avatar.jpg",
 
   // 邮箱
   email: "189532159@qq.com",
@@ -45,8 +45,11 @@ export const personalInfo = {
   // GitHub 用户名
   github: "jinchen-Yang",
 
-  // 微博用户名
-  weibo: "your-username",
+  // Gitee 用户名
+  gitee: "your-gitee-username",
+
+  // Bilibili 用户名
+  bilibili: "your-bilibili-username",
 
   // 个人网站
   website: "https://your-domain.com",
@@ -60,19 +63,19 @@ export const socialLinks = [
     url: `https://github.com/${personalInfo.github}`,
   },
   {
-    name: "微博",
-    icon: "fa6-brands:weibo",
-    url: `https://weibo.com/${personalInfo.weibo}`,
+    name: "Gitee",
+    icon: "fa6-brands:git-alt",
+    url: `https://gitee.com/${personalInfo.gitee}`,
+  },
+  {
+    name: "Bilibili",
+    icon: "fa6-brands:bilibili",
+    url: `https://space.bilibili.com/${personalInfo.bilibili}`,
   },
   {
     name: "邮箱",
     icon: "fa6-solid:envelope",
     url: `mailto:${personalInfo.email}`,
-  },
-  {
-    name: "博客",
-    icon: "fa6-solid:file-lines",
-    url: personalInfo.website,
   },
 ];
 
@@ -100,57 +103,22 @@ export const navigationLinks = [
         icon: "fa6-brands:github",
       },
       {
-        name: "微博",
-        url: `https://weibo.com/${personalInfo.weibo}`,
+        name: "Gitee",
+        url: `https://gitee.com/${personalInfo.gitee}`,
         external: true,
-        icon: "fa6-brands:weibo",
+        icon: "fa6-brands:git-alt",
+      },
+      {
+        name: "Bilibili",
+        url: `https://space.bilibili.com/${personalInfo.bilibili}`,
+        external: true,
+        icon: "fa6-brands:bilibili",
       },
       {
         name: "邮箱",
         url: `mailto:${personalInfo.email}`,
         external: true,
         icon: "material-symbols:mail",
-      },
-    ],
-  },
-  {
-    name: "我的",
-    url: "/content/",
-    icon: "material-symbols:person",
-    children: [
-      {
-        name: "日记",
-        url: "/diary/",
-        icon: "material-symbols:book",
-      },
-      {
-        name: "相册",
-        url: "/albums/",
-        icon: "material-symbols:photo-library",
-        external: false,
-      },
-      {
-        name: "设备",
-        url: "/devices/",
-        icon: "material-symbols:devices",
-        external: false,
-      },
-    ],
-  },
-  {
-    name: "关于",
-    url: "/content/",
-    icon: "material-symbols:info",
-    children: [
-      {
-        name: "关于我",
-        url: "/about/",
-        icon: "material-symbols:person",
-      },
-      {
-        name: "友链",
-        url: "/friends/",
-        icon: "material-symbols:group",
       },
     ],
   },
@@ -192,10 +160,10 @@ export const bannerConfig = {
   ],
 
   // 桌面端横幅图片
-  desktopBanner: "/assets/desktop-banner/1.webp",
+  desktopBanner: "/assets/site/banner/desktop/1.webp",
 
   // 移动端横幅图片
-  mobileBanner: "/assets/mobile-banner/1.webp",
+  mobileBanner: "/assets/site/banner/mobile/1.webp",
 
   // 是否启用轮播
   carousel: false,

@@ -64,11 +64,14 @@ const getBannerImages = async () => {
 	if (siteConfig.banner.imageApi?.enable && siteConfig.banner.imageApi?.url) {
 		try {
 			const response = await fetch(siteConfig.banner.imageApi.url);
-			const text = await response.text();
-			const apiImages = text.split("\n").filter((line) => line.trim());
+			const data = await response.json();
 
-			if (apiImages.length > 0) {
-				bannerSrc = apiImages;
+			// 解析必应API返回的JSON格式
+			// 必应API返回格式: {"url":"https://www.bing.com/th?id=OHR.XXX","copyright":"..."}
+			if (data?.url) {
+				// 确保URL是完整的
+				const imageUrl = data.url.startsWith("http") ? data.url : `https://www.bing.com${data.url}`;
+				bannerSrc = [imageUrl];
 			}
 		} catch (error) {
 			console.warn("Failed to fetch images from API:", error);

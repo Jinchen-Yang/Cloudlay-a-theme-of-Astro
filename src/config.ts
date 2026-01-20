@@ -49,21 +49,21 @@ export const siteConfig: SiteConfig = {
 	// 特色页面开关配置(关闭不在使用的页面有助于提升SEO,关闭后直接在顶部导航删除对应的页面就行)
 	featurePages: {
 		anime: false, // 番剧页面开关
-		diary: true, // 日记页面开关
-		friends: true, // 友链页面开关
+		diary: false, // 日记页面开关
+		friends: false, // 友链页面开关
 		projects: true, // 项目页面开关
 		skills: true, // 技能页面开关
 		timeline: true, // 时间线页面开关
-		albums: true, // 相册页面开关
-		devices: true, // 设备页面开关
+		albums: false, // 相册页面开关
+		devices: false, // 设备页面开关
 	},
 
 	// 顶栏标题配置
 	navbarTitle: {
 		// 顶栏标题文本
 		text: siteInfo.title,
-		// 顶栏标题图标路径，默认使用 public/assets/home/home.png
-		icon: "assets/home/home.png",
+		// 顶栏标题图标路径，留空则使用默认的 home 图标
+		icon: "",
 	},
 
 	bangumi: {
@@ -128,8 +128,8 @@ export const siteConfig: SiteConfig = {
 
 		// PicFlow API支持(智能图片API)
 		imageApi: {
-			enable: false, // 启用图片API
-			url: "", // API地址，返回每行一个图片链接的文本
+			enable: true, // 启用图片API
+			url: "https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN", // 必应每日图片API
 		},
 
 		homeText: {
@@ -164,12 +164,9 @@ export const siteConfig: SiteConfig = {
 	showCoverInContent: otherConfig.showCover, // 在文章内容页显示文章封面
 	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
 	favicon: [
-		// 留空以使用默认 favicon
-		// {
-		//   src: '/favicon/icon.png',    // 图标文件路径
-		//   theme: 'light',              // 可选，指定主题 'light' | 'dark'
-		//   sizes: '32x32',              // 可选，图标大小
-		// }
+		{
+			src: 'src/assets/images/avatar.ico',    // 图标文件路径
+		}
 	],
 
 	// 字体配置
@@ -186,9 +183,9 @@ export const siteConfig: SiteConfig = {
 		},
 		cjkFont: {
 			// 中日韩字体 - 作为回退字体
-			fontFamily: "萝莉体 第二版",
-			fontWeight: "500",
-			localFonts: ["萝莉体 第二版.ttf"],
+			fontFamily: "ZenMaruGothic-Medium",
+			fontWeight: "400",
+			localFonts: ["ZenMaruGothic-Medium.ttf"],
 			enableCompress: true, // 启用字体子集优化，减少字体文件大小
 		},
 	},
@@ -198,10 +195,10 @@ export const siteConfig: SiteConfig = {
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 	src: {
 		desktop: [
-			"/assets/desktop-banner/1.webp",
+			"/assets/site/banner/desktop/1.webp",
 		], // 桌面横幅图片
 		mobile: [
-			"/assets/mobile-banner/1.webp",
+			"/assets/site/banner/mobile/1.webp",
 		], // 移动横幅图片
 	}, // 使用本地横幅图片
 	position: "center", // 壁纸位置，等同于 object-position

@@ -1,6 +1,6 @@
-# 📚 Cloudlay - 一个高性能、低占用的 Astro 博客主题
+# 📚 现代化个人博客系统 - Cloudlay Theme
 
-> 使用 **Astro** 构建的现代化个人博客系统，专注于极速响应和资源优化
+> 使用 **Astro 5.x** 构建的高性能、低占用个人博客系统，专注于极速响应和资源优化
 
 ## ✨ 核心特点
 
@@ -12,7 +12,7 @@
 - **CDN 友好** - 纯静态文件，易部署到全球 CDN
 
 ### 💾 低占用资源
-- **最小化依赖** - 仅 10 个核心依赖，无重型框架
+- **最小化依赖** - 精选核心依赖，无重型框架
 - **按需加载资源** - KaTeX、Wiki 链接等功能通过按需加载实现
 - **优化构建产物** - 生产构建体积小，适合低配服务器
 - **轻量级样式** - 纯 CSS 变量 + Obsidian 主题，无 CSS 框架臃肿
@@ -25,7 +25,7 @@
 - **文章元数据** - 标签、作者、日期、分类等丰富元数据
 
 ### 🎨 现代化设计
-- **响应式布局** - 完美适配所有屏幕尺寸
+- **响应式布局** - 完美适配所有屏幕尺寸（手机/平板/桌面）
 - **深色/浅色模式** - Obsidian 主题风格，护眼舒适
 - **面包屑导航** - 清晰的网站层级结构
 - **卡片设计** - 现代化卡片组件，视觉层次分明
@@ -53,7 +53,7 @@
 
 | 指标 | 达成情况 | 说明 |
 |-----|--------|------|
-| **依赖数量** | ⭐⭐⭐⭐⭐ | 仅 10 个依赖，无重型框架 |
+| **依赖数量** | ⭐⭐⭐⭐⭐ | 精选核心依赖，避免版本膨胀 |
 | **构建时间** | ⭐⭐⭐⭐ | 增量构建 < 5s，完整构建 < 15s |
 | **服务器资源** | ⭐⭐⭐⭐⭐ | 纯静态托管，无 CPU/内存消耗 |
 | **冷启动时间** | ⭐⭐⭐⭐⭐ | 开发服务器启动 < 1s |
@@ -71,6 +71,7 @@
 
 ## 📁 项目结构
 
+### 源代码目录
 ```
 src/
 ├── components/                    # 🎨 可复用的 Astro 组件系统
@@ -110,42 +111,104 @@ src/
     └── remark-callouts.js        # 自定义 Remark 插件
 ```
 
+### 静态资源目录
+```
+public/
+├── assets/
+│   ├── content/                  # 📖 文章配图类资源
+│   │   ├── albums/               # 相册图片
+│   │   ├── blog/                 # 博客文章配图
+│   │   ├── device/               # 设备展示图片
+│   │   ├── diary/                # 日记配图
+│   │   └── notes/                # 学习笔记配图
+│   │
+│   ├── site/                     # 🎨 站点配置类资源
+│   │   ├── avatar/               # 头像文件
+│   │   ├── background/           # 背景图片（如樱花特效）
+│   │   ├── banner/               # 横幅图片
+│   │   │   ├── desktop/          # 桌面端横幅
+│   │   │   └── mobile/           # 移动端横幅
+│   │   ├── favicon/              # 网站图标
+│   │   ├── anime/                # 动漫相关图片
+│   │   ├── music/                # 音乐资源
+│   │   │   ├── cover/            # 音乐封面
+│   │   │   └── url/              # 音频文件
+│   │   ├── css/                  # 样式文件
+│   │   ├── font/                 # 字体文件
+│   │   └── js/                   # JavaScript 文件
+```
+
+### 资源分类说明
+- **文章配图类 (`content/`)**: 用于博客文章、笔记、项目等内容中的图片，按内容类型分类
+- **站点配置类 (`site/`)**: 用于网站布局、样式、功能等固定资源，按功能分类
+
+### 图片路径引用规则
+在代码中引用图片时，使用以下格式：
+```astro
+<!-- 文章配图 -->
+<img src="/assets/content/blog/your-image.jpg" alt="描述">
+
+<!-- 站点资源 -->
+<img src="/assets/site/avatar/avatar.jpg" alt="头像">
+```
+
 ---
 
 ## 🚀 快速开始
 
 ### 前置要求
 - **Node.js** 18.x 或更高版本（Astro 5 推荐）
-- **npm** / **yarn** / **pnpm**
+- **pnpm** 包管理器
 
-### 5 步启动
+### 6 步启动
 
 ```bash
 # 1️⃣ 克隆项目
 git clone git@github.com:Jinchen-Yang/Cloudlay-a-theme-of-Astro.git
 cd Cloudlay-a-theme-of-Astro
 
-# 2️⃣ 安装依赖
-npm install
+# 2️⃣ 配置环境变量
+cp .env.example .env
+# 编辑 .env 文件，根据需要配置环境变量
 
-# 3️⃣ 启动开发服务器
-npm run dev
+# 3️⃣ 安装依赖
+pnpm install
+
+# 4️⃣ 启动开发服务器
+pnpm run dev
 # 访问 http://localhost:3000
 
-# 4️⃣ 编写内容（修改 src/content/ 下的 Markdown 文件）
+# 5️⃣ 编写内容（修改 src/content/ 下的 Markdown 文件）
 
-# 5️⃣ 构建生产版本
-npm run build
+# 6️⃣ 构建生产版本
+pnpm run build
 ```
+
+### 环境变量配置
+项目提供了 `.env.example` 文件作为环境变量模板，包含以下主要配置项：
+
+```env
+# 内容仓库配置（可选）
+CONTENT_REPO_URL=  # 远程内容仓库 URL，用于自动同步内容
+
+# Bangumi 番剧数据（可选）
+BANGUMI_USER_ID=   # Bangumi 用户 ID，用于获取番剧追番数据
+
+# Umami 分析（可选）
+UMAMI_API_KEY=     # Umami 分析 API 密钥
+UMAMI_WEBSITE_ID=  # Umami 网站 ID
+```
+
+**注意**: `.env` 文件包含敏感信息，不应提交到版本控制系统。
 
 ### 🛠️ 可用命令
 
 | 命令 | 说明 | 执行时间 |
 |-----|------|--------|
-| `npm run dev` | 启动开发服务器（热更新） | ~1s |
-| `npm run build` | 构建生产网站 | ~10-15s |
-| `npm run preview` | 预览生产构建 | ~1s |
-| `npm run astro` | 执行 Astro CLI 命令 | - |
+| `pnpm run dev` | 启动开发服务器（热更新） | ~1s |
+| `pnpm run build` | 构建生产网站 | ~10-15s |
+| `pnpm run preview` | 预览生产构建 | ~1s |
+| `pnpm run astro` | 执行 Astro CLI 命令 | - |
 
 ---
 
@@ -234,15 +297,15 @@ lastModified: 2026-01-15
   --color-text-primary: #333333;      /* 主文本 */
   --color-text-secondary: #666666;    /* 辅助文本 */
   --color-border: #e0e0e0;            /* 边框颜色 */
-  
+
   /* 间距 */
   --spacing-base: 1rem;
   --spacing-lg: 2rem;
-  
+
   /* 圆角 */
   --radius-sm: 4px;
   --radius-md: 8px;
-  
+
   /* 字体 */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Monaco', 'Courier New', monospace;
@@ -344,12 +407,124 @@ export default defineConfig({
 });
 
 # 2. 构建
-npm run build
+pnpm run build
 
 # 3. 推送到 GitHub
 git add .
 git commit -m "Deploy to GitHub Pages"
 git push origin main
+```
+
+---
+
+## 📱 响应式设计
+
+### 设计目标
+- ✅ **高响应性** - 各个设备上流畅交互，0阻塞加载
+- ✅ **一致体验** - 统一的设计语言和交互模式
+- ✅ **性能优先** - 最小化CSS和JavaScript
+- ✅ **易于维护** - 模块化组件和变量系统
+
+### 响应式断点
+
+| 设备类型 | 屏幕宽度 | 布局特点 | 用途 |
+|---------|--------|--------|------|
+| **手机** | < 480px | 单列，触摸优化 | 小屏手机 |
+| **大手机** | 480px - 768px | 单列，优化阅读 | iPhone Plus, 安卓大屏 |
+| **平板竖屏** | 768px - 1024px | 单列或两列 | iPad 竖屏 |
+| **平板横屏** | 1024px - 1280px | 两列布局 | iPad 横屏、小屏电脑 |
+| **桌面** | > 1280px | 两列布局，侧边栏固定 | 显示器 |
+
+### 布局结构
+
+#### 桌面布局 (> 1024px)
+```
+左侧侧边栏 (固定, 320px) | 右侧内容区域
+- 头像、信息、导航        | - 欢迎区域、文章列表
+```
+
+#### 平板布局 (768px - 1024px)
+```
+侧边栏 (280px) | 内容区域
+网格排列侧边栏 | 单列内容
+```
+
+#### 手机布局 (< 768px)
+```
+侧边栏（顶部）
+内容区域
+```
+
+---
+
+## 🚀 优化指南
+
+### 项目结构优化
+
+#### 建议的模块化结构
+```
+src/
+├── components/
+│   ├── layouts/         # 布局组件专用
+│   ├── ui/              # 可复用 UI 组件
+│   ├── features/        # 功能组件（搜索、评论等）
+│   └── misc/            # 杂项组件
+├── plugins/
+│   ├── markdown/        # Markdown 处理插件
+│   ├── rehype/          # Rehype 插件
+│   └── remark/          # Remark 插件
+├── utils/
+│   ├── parsers/         # 解析工具
+│   ├── images/          # 图片处理工具
+│   └── transforms/      # 数据转换
+├── hooks/               # 自定义 Astro/Svelte hooks
+├── services/            # 业务逻辑服务
+└── middleware/          # 中间件（如果需要）
+```
+
+### 性能优化建议
+
+#### 1. 代码分割优化
+```javascript
+// astro.config.mjs
+export default defineConfig({
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-icons': ['@iconify/svelte', 'astro-icon'],
+            'vendor-ui': ['photoswipe', '@fancyapps/ui'],
+            'vendor-markdown': ['marked', 'markdown-it', 'katex'],
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+#### 2. 图片优化
+```astro
+<!-- 使用优化的图片组件 -->
+<Image
+  src={image}
+  alt="..."
+  loading="lazy"
+  placeholder="blurred"
+  densities={[1, 2]}
+/>
+```
+
+#### 3. 字体优化
+```css
+/* 在 src/styles/global.css 中添加 */
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/roboto.woff2') format('woff2');
+  font-display: swap; /* 关键：避免 FOUT */
+  font-weight: 100 900;
+}
 ```
 
 ---
@@ -396,41 +571,6 @@ $$
 - Vercel
 - Cloudflare Pages
 - AWS S3 + CloudFront
-
----
-
-## 🚀 性能优化建议
-
-### ✅ 已实现的优化
-
-| 优化措施 | 效果 | 实现方式 |
-|--------|------|--------|
-| **静态生成** | 无运行时开销 | Astro 默认行为 |
-| **零 JS 默认** | 最小包体积 | 组件级 `client:` 指令 |
-| **资源懒加载** | 按需加载 | 脚本 `defer` 属性 |
-| **CSS 最小化** | 极简样式 | 无 CSS 框架 |
-| **CDN 友好** | 全球加速 | 纯静态文件 |
-
-### 🔮 可进一步优化
-
-1. **图片优化**
-   ```astro
-   <Image src={image} alt="..." width={800} height={600} />
-   ```
-
-2. **字体优化**
-   ```css
-   @font-face {
-     font-display: swap; /* 优先显示系统字体 */
-   }
-   ```
-
-3. **缓存策略**
-   ```
-   # .htaccess 或 Netlify.toml
-   Cache-Control: max-age=31536000 （静态资源）
-   Cache-Control: max-age=3600 （HTML）
-   ```
 
 ---
 
